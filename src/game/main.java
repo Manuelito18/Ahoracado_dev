@@ -108,24 +108,34 @@ public class main extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "Integrantes:\n- Correa Hurtado Sleyter Alexander\n- Montes Pozo Lucrecia Victoria\n- Girón Villegas Anderson Benjamín\n- Fustamente Sosa Lennart Samuel\n- Fernández Sandoval José Manuel");
+        Icon g=new ImageIcon(getClass().getResource("/res/uss.png"));
+        JOptionPane.showMessageDialog(null,"Juego creado por:\nEstudiante de la Universidad de Señor de Sipán.\n Ing.Sistemas . \n V Ciclo"
+                + "\n\n Correa Hurtado Sleyter Alexander.\n Montes Pozo Lucrecia Victoria. \n Mendoza Vega Carlos Yair.\n Girón Villegas Anderson Benjamín.\n José Manuel Fernández Sandoval."
+                , "Ahorcado",JOptionPane.INFORMATION_MESSAGE, g);
     
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "Patrones de Diseño usados:\n- Abstract Factory\n- Builder\n- Prototype\n- Adapter\n- Facade\n- Command\n- Iterator\n- Composite\n- Decorator");
+        JOptionPane.showMessageDialog(this, "Patrones de Diseño usados:\n- Abstract Factory\n- Builder\n- Prototype\n- Adapter\n- Facade\n- Command\n- Iterator\n- Composite\n- Decorator","Patrones Usados",JOptionPane.INFORMATION_MESSAGE);
     
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        new juego().setVisible(true);
+        new juego().setVisible(true); // Iniciar la ventana del juego
+    
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        System.exit(0);
+        if (JOptionPane.showConfirmDialog(rootPane, "¿Salir de la aplicación?",
+                "Ahorcado", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE) == JOptionPane.YES_OPTION)
+        {System.exit(0);
+        }
+        else{
+                setDefaultCloseOperation(0);
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
