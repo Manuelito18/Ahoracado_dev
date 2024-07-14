@@ -4,17 +4,71 @@
  */
 package game;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 /**
  *
  * @author Usuario
  */
-public class juego extends javax.swing.JFrame {
+public class juego extends JFrame {
+    private JLabel lblImagen;
+    private JLabel lblErrores;
+    private JPanel panelLetras;
+    private JLabel lblAdivinar;
+    private GameFacade gameFacade;
 
-    /**
-     * Creates new form juego
-     */
     public juego() {
-        initComponents();
+        gameFacade = new GameFacade();
+        initUI();
+        initGame();
+    }
+
+    private void initUI() {
+        setTitle("Juego de Ahorcado");
+        setSize(600, 400);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+
+        // Panel superior con la imagen del ahorcado
+        lblImagen = new JLabel();
+        lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
+        add(lblImagen, BorderLayout.NORTH);
+
+        // Panel central con la palabra a adivinar
+        lblAdivinar = new JLabel();
+        lblAdivinar.setFont(new Font("Arial", Font.PLAIN, 24));
+        lblAdivinar.setHorizontalAlignment(SwingConstants.CENTER);
+        add(lblAdivinar, BorderLayout.CENTER);
+
+        // Panel inferior con las letras y errores
+        JPanel panelInferior = new JPanel(new BorderLayout());
+        
+        // Panel de errores
+        lblErrores = new JLabel("Errores: 0");
+        lblErrores.setHorizontalAlignment(SwingConstants.CENTER);
+        panelInferior.add(lblErrores, BorderLayout.NORTH);
+
+        // Panel de letras
+        panelLetras = new JPanel(new GridLayout(3, 9));
+        for (char c = 'A'; c <= 'Z'; c++) {
+            JButton btnLetra = new JButton(String.valueOf(c));
+            btnLetra.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    gameFacade.procesarLetra(c);
+                    actualizarUI();
+                    
+                }
+
+            });
+            panelLetras.add(btnLetra);
+        }
+        panelInferior.add(panelLetras, BorderLayout.CENTER);
+
+        add(panelInferior, BorderLayout.SOUTH);
     }
 
     /**
@@ -32,11 +86,11 @@ public class juego extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 700, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 559, Short.MAX_VALUE)
         );
 
         pack();
@@ -76,6 +130,16 @@ public class juego extends javax.swing.JFrame {
             }
         });
     }
+
+    private void initGame() {
+               gameFacade.iniciarJuego();
+        actualizarUI();
+    }
+
+            private void actualizarUI() {
+                         lblImagen.setIcon(new ImageIcon(gameFacade.obtenerImagen()));
+                            lblAdivinar.setText(gameFacade.obtenerPalabraAdivinada());
+                            lblErrores.setText("Errores: " + gameFacade.obtenerErrores());}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
