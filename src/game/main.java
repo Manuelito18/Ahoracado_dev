@@ -117,7 +117,7 @@ public class main extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "Patrones de Diseño usados:\n- Abstract Factory\n- Builder\n- Prototype\n- Adapter\n- Facade\n- Command\n- Iterator\n- Composite\n- Decorator","Patrones Usados",JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Patrones de Diseño usados:\n- SINGLETON \n- OBSERVER","Patrones Usados",JOptionPane.INFORMATION_MESSAGE);
     
     }//GEN-LAST:event_jButton2ActionPerformed
 
