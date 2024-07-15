@@ -4,10 +4,10 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 
-
 //actualiando para la cpiaaad
 //feefefe
 public class juego extends javax.swing.JFrame {
+
     private String palabraActual;
     private StringBuilder palabraAdivinada;
     private Set<Character> letrasErroneas;
@@ -19,6 +19,7 @@ public class juego extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         inicializarJuego();
+        actualizarImagenAhorcado();  // Añade esta línea
     }
 
     private void inicializarJuego() {
@@ -29,26 +30,40 @@ public class juego extends javax.swing.JFrame {
         observers = new ArrayList<>();
 
         addObserver(new InterfazObserver());
-        
+
         bot_NewPalabra.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 nuevaPalabra();
             }
         });
 
         bot_solve.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 resolver();
             }
         });
 
         textField_palabra.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     intentarLetra();
                 }
             }
         });
+    }
+
+    private void actualizarImagenAhorcado() {
+        String nombreImagen = "/res/aho_" + fallos + ".jpeg";
+        java.net.URL urlImagen = getClass().getResource(nombreImagen);
+        if (urlImagen != null) {
+            ImageIcon iconoAhorcado = new ImageIcon(urlImagen);
+            label_ahorcado.setIcon(iconoAhorcado);
+        } else {
+            System.out.println("No se pudo cargar la imagen: " + nombreImagen);
+        }
     }
 
     private void nuevaPalabra() {
@@ -68,6 +83,31 @@ public class juego extends javax.swing.JFrame {
         }
 
         char letra = input.charAt(0);
+        if (!Character.isLetter(letra)) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa una letra válida.");
+            return;
+        }
+
+        procesarLetra(letra);
+
+        textField_palabra.setText("");
+    }
+
+    private void resolver() {
+        String intento = JOptionPane.showInputDialog(this, "Ingresa una letra:");
+        if (intento != null && intento.length() == 1) {
+            char letra = intento.toUpperCase().charAt(0);
+            if (Character.isLetter(letra)) {
+                procesarLetra(letra);
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor, ingresa una letra válida.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa una sola letra.");
+        }
+    }
+
+    private void procesarLetra(char letra) {
         if (letrasErroneas.contains(letra) || palabraAdivinada.toString().contains(String.valueOf(letra))) {
             JOptionPane.showMessageDialog(this, "Ya has intentado esta letra.");
             return;
@@ -84,37 +124,27 @@ public class juego extends javax.swing.JFrame {
         if (!acierto) {
             letrasErroneas.add(letra);
             fallos++;
+            notifyObservers();  // Asegúrate de que esta línea esté presente
         }
 
         notifyObservers();
 
+        verificarEstadoJuego();
+    }
+
+    private void verificarEstadoJuego() {
         if (palabraAdivinada.toString().equals(palabraActual)) {
-            JOptionPane.showMessageDialog(this, "¡Felicidades! Has adivinado la palabra.");
+            JOptionPane.showMessageDialog(this, "¡Felicidades! Has adivinado la palabra: " + palabraActual);
+            nuevaPalabra();  // Inicia un nuevo juego
         } else if (fallos >= MAX_FALLOS) {
             JOptionPane.showMessageDialog(this, "Game Over. La palabra era: " + palabraActual);
-        }
-
-        textField_palabra.setText("");
-    }
-
-    private void resolver() {
-        String intento = JOptionPane.showInputDialog(this, "Intenta adivinar la palabra completa:");
-        if (intento != null && intento.toUpperCase().equals(palabraActual)) {
-            palabraAdivinada = new StringBuilder(palabraActual);
-            notifyObservers();
-            JOptionPane.showMessageDialog(this, "¡Correcto! Has adivinado la palabra.");
-        } else {
-            fallos = MAX_FALLOS;
-            notifyObservers();
-            JOptionPane.showMessageDialog(this, "Incorrecto. La palabra era: " + palabraActual);
+            nuevaPalabra();  // Inicia un nuevo juego
         }
     }
 
-    
-    
-    
     // Patrón Observador
     public interface Observer {
+
         void update();
     }
 
@@ -129,24 +159,26 @@ public class juego extends javax.swing.JFrame {
     }
 
     private class InterfazObserver implements Observer {
-    @Override
-    public void update() {
-        textField_palabra.setText(palabraAdivinada.toString());
-        label_errores.setText("Errores: " + String.join(", ", letrasErroneas.stream().map(String::valueOf).toArray(String[]::new)));
-        actualizarImagenAhorcado();
-    }
 
-    private void actualizarImagenAhorcado() {
-    String rutaImagen = "C:/Users/Usuario/Documents/NetBeansProjects/Ahoracado_dev/src/res/aho_" + fallos + ".png";
-    ImageIcon iconoAhorcado = new ImageIcon(rutaImagen);
-    if (iconoAhorcado.getImage() == null) {
-        System.out.println("No se pudo cargar la imagen: " + rutaImagen);
-    } else {
-        label_ahorcado.setIcon(iconoAhorcado);
-    }
-}
-}
+        @Override
+        public void update() {
+            textField_palabra.setText(palabraAdivinada.toString());
+            label_errores.setText("Errores: " + String.join(", ", letrasErroneas.stream().map(String::valueOf).toArray(String[]::new)));
+            actualizarImagenAhorcado();
+        }
 
+        private void actualizarImagenAhorcado() {
+            String nombreImagen = "/res/aho_" + fallos + ".jpeg";
+            java.net.URL urlImagen = getClass().getResource(nombreImagen);
+            if (urlImagen != null) {
+                ImageIcon iconoAhorcado = new ImageIcon(urlImagen);
+                label_ahorcado.setIcon(iconoAhorcado);
+            } else {
+                System.out.println("No se pudo cargar la imagen: " + nombreImagen);
+            }
+        }
+
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -272,8 +304,7 @@ public class juego extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(label_ahorcado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(label_ahorcado, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -335,10 +366,8 @@ public class juego extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new juego().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new juego().setVisible(true);
         });
     }
 
