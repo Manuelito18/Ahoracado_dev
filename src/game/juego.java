@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 
+
+//actualiando para la cpiaaad
+//feefefe
 public class juego extends javax.swing.JFrame {
     private String palabraActual;
     private StringBuilder palabraAdivinada;
