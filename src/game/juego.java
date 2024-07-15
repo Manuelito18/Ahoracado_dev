@@ -3,6 +3,8 @@ package game;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 //actualiando para la cpiaaad
 //feefefe
@@ -12,14 +14,15 @@ public class juego extends javax.swing.JFrame {
     private StringBuilder palabraAdivinada;
     private Set<Character> letrasErroneas;
     private int fallos;
-    private final int MAX_FALLOS = 6;
-    private List<Observer> observers;
+    private static final int MAX_FALLOS = 6;
+    private static final String[] PALABRAS = {"JAVA", "PROGRAMACION", "ALGORITMO", "INTERFAZ", "DESARROLLO"};
+    private List<JuegoObserver> observers;
 
     public juego() {
         initComponents();
         this.setLocationRelativeTo(null);
         inicializarJuego();
-        actualizarImagenAhorcado();  // Añade esta línea
+        actualizarImagenAhorcado();
     }
 
     private void inicializarJuego() {
@@ -31,20 +34,8 @@ public class juego extends javax.swing.JFrame {
 
         addObserver(new InterfazObserver());
 
-        bot_NewPalabra.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                nuevaPalabra();
-            }
-        });
-
-        bot_solve.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                resolver();
-            }
-        });
-
+        bot_NewPalabra.addActionListener(e -> nuevaPalabra());
+        bot_solve.addActionListener(e -> resolver());
         textField_palabra.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -67,8 +58,7 @@ public class juego extends javax.swing.JFrame {
     }
 
     private void nuevaPalabra() {
-        String[] palabras = {"JAVA", "PROGRAMACION", "ALGORITMO", "INTERFAZ", "DESARROLLO"};
-        palabraActual = palabras[new Random().nextInt(palabras.length)];
+        palabraActual = PALABRAS[new Random().nextInt(PALABRAS.length)];
         palabraAdivinada = new StringBuilder("_".repeat(palabraActual.length()));
         letrasErroneas.clear();
         fallos = 0;
@@ -113,22 +103,19 @@ public class juego extends javax.swing.JFrame {
             return;
         }
 
-        boolean acierto = false;
-        for (int i = 0; i < palabraActual.length(); i++) {
-            if (palabraActual.charAt(i) == letra) {
-                palabraAdivinada.setCharAt(i, letra);
-                acierto = true;
+        boolean acierto = palabraActual.chars().anyMatch(c -> c == letra);
+        if (acierto) {
+            for (int i = 0; i < palabraActual.length(); i++) {
+                if (palabraActual.charAt(i) == letra) {
+                    palabraAdivinada.setCharAt(i, letra);
+                }
             }
-        }
-
-        if (!acierto) {
+        } else {
             letrasErroneas.add(letra);
             fallos++;
-            notifyObservers();  // Asegúrate de que esta línea esté presente
         }
 
         notifyObservers();
-
         verificarEstadoJuego();
     }
 
@@ -148,26 +135,30 @@ public class juego extends javax.swing.JFrame {
         void update();
     }
 
-    public void addObserver(Observer observer) {
+    public void addObserver(JuegoObserver observer) {
         observers.add(observer);
     }
 
-    public void notifyObservers() {
-        for (Observer observer : observers) {
-            observer.update();
+    public void removeObserver(JuegoObserver observer) {
+        observers.remove(observer);
+    }
+
+    private void notifyObservers() {
+        for (JuegoObserver observer : observers) {
+            observer.update(palabraAdivinada.toString(), letrasErroneas, fallos);
         }
     }
 
-    private class InterfazObserver implements Observer {
+    private class InterfazObserver implements JuegoObserver {
 
         @Override
-        public void update() {
-            textField_palabra.setText(palabraAdivinada.toString());
+        public void update(String palabraAdivinada, Set<Character> letrasErroneas, int fallos) {
+            textField_palabra.setText(palabraAdivinada);
             label_errores.setText("Errores: " + String.join(", ", letrasErroneas.stream().map(String::valueOf).toArray(String[]::new)));
-            actualizarImagenAhorcado();
+            actualizarImagenAhorcado(fallos);
         }
 
-        private void actualizarImagenAhorcado() {
+        private void actualizarImagenAhorcado(int fallos) {
             String nombreImagen = "/res/aho_" + fallos + ".jpeg";
             java.net.URL urlImagen = getClass().getResource(nombreImagen);
             if (urlImagen != null) {
@@ -177,7 +168,6 @@ public class juego extends javax.swing.JFrame {
                 System.out.println("No se pudo cargar la imagen: " + nombreImagen);
             }
         }
-
     }
 
     @SuppressWarnings("unchecked")
