@@ -126,12 +126,24 @@ public class juego extends javax.swing.JFrame {
     }
 
     private class InterfazObserver implements Observer {
-        public void update() {
-            textField_palabra.setText(palabraAdivinada.toString());
-            label_errores.setText("Errores: " + String.join(", ", letrasErroneas.stream().map(String::valueOf).toArray(String[]::new)));
-            label_ahorcado.setIcon(new ImageIcon(getClass().getResource("/imagenes/ahorcado" + fallos + ".png")));
-        }
+    @Override
+    public void update() {
+        textField_palabra.setText(palabraAdivinada.toString());
+        label_errores.setText("Errores: " + String.join(", ", letrasErroneas.stream().map(String::valueOf).toArray(String[]::new)));
+        actualizarImagenAhorcado();
     }
+
+    private void actualizarImagenAhorcado() {
+    String rutaImagen = "C:/Users/Usuario/Documents/NetBeansProjects/Ahoracado_dev/src/res/aho_" + fallos + ".png";
+    ImageIcon iconoAhorcado = new ImageIcon(rutaImagen);
+    if (iconoAhorcado.getImage() == null) {
+        System.out.println("No se pudo cargar la imagen: " + rutaImagen);
+    } else {
+        label_ahorcado.setIcon(iconoAhorcado);
+    }
+}
+}
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -249,13 +261,15 @@ public class juego extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(153, 255, 153));
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("MUERTITO"));
 
+        label_ahorcado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/aho_0.jpeg"))); // NOI18N
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(label_ahorcado, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                .addComponent(label_ahorcado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(

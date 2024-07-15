@@ -49,7 +49,7 @@ public class main extends javax.swing.JFrame {
         jLabel1.setText("AHORCADO");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, 178, 32));
 
-        jButton1.setBackground(new java.awt.Color(255, 255, 255));
+        jButton1.setBackground(new java.awt.Color(0, 51, 51));
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("CREDITOS");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -59,7 +59,7 @@ public class main extends javax.swing.JFrame {
         });
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 140, 137, 52));
 
-        jButton3.setBackground(new java.awt.Color(255, 255, 255));
+        jButton3.setBackground(new java.awt.Color(0, 51, 51));
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("JUGAR");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -69,7 +69,7 @@ public class main extends javax.swing.JFrame {
         });
         jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 70, 137, 52));
 
-        jButton4.setBackground(new java.awt.Color(255, 255, 255));
+        jButton4.setBackground(new java.awt.Color(0, 51, 51));
         jButton4.setForeground(new java.awt.Color(255, 255, 255));
         jButton4.setText("SALIR");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -79,7 +79,7 @@ public class main extends javax.swing.JFrame {
         });
         jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 210, 137, 52));
 
-        jButton2.setBackground(new java.awt.Color(255, 255, 255));
+        jButton2.setBackground(new java.awt.Color(0, 51, 51));
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("CODIGOS");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -107,11 +107,22 @@ public class main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        Icon g=new ImageIcon(getClass().getResource("/res/uss.png"));
+        JOptionPane.showMessageDialog(null, """
+                                            Juego creado por:
+                                            Estudiante de la Universidad de Se\u00f1or de Sip\u00e1n.
+                                             Ing.Sistemas . 
+                                             V Ciclo
+                                            
+                                             Correa Hurtado Sleyter Alexander.
+                                             Montes Pozo Lucrecia Victoria. 
+                                             Fustamante Sosa Lennart Samuel.
+                                             Gir\u00f3n Villegas Anderson Benjam\u00edn.
+                                             Jos\u00e9 Manuel Fern\u00e1ndez Sandoval.""", "Ahorcado",JOptionPane.INFORMATION_MESSAGE, g);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Patrones de Diseño usados:\n- SINGLETON \n- OBSERVER","Patrones Usados",JOptionPane.INFORMATION_MESSAGE);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -121,7 +132,10 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        
+    System.exit(0);
+        
+// TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
@@ -152,10 +166,8 @@ public class main extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new main().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new main().setVisible(true);
         });
     }
 
